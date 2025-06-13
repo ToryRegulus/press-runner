@@ -45,32 +45,130 @@
           "description": "%press-runner.useTerminal.desc%",
           "scope": "resource"
         },
-        "press-runner.commandsMap": {
-          "type": "object",
-          "default": {
-            "python": {
-              "commands": {
-                "plugin": "python.execInDedicatedTerminal",
-                "terminal": "python ${fileName}"
-              },
-              "useTerminal": "global"
+        "press-runner.commandsMap.python.Commands": {
+          "type":"object",
+          "properties": {
+            "plugin": {
+              "type": "string",
+              "description": "%press-runner.commandsMap.python.Commands.plugin_desc%"
             },
-            "c": {
-              "commands": {
-                "plugin": "cmake.launchTarget",
-                "terminal": "cd ${dir} && gcc ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
-              },
-              "useTerminal": "global"
+            "command": {
+              "type": "string",
+              "description": "%press-runner.commandsMap.python.Commands.command_desc%"
             },
-            "cpp": {
-              "commands": {
-                "plugin": "cmake.launchTarget",
-                "terminal": "cd ${dir} && g++ ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
-              },
-              "useTerminal": "global"
+            "terminal": {
+              "type": "string",
+              "description": "%press-runner.commandsMap.python.Commands.terminal_desc%"
             }
           },
-          "description": "%press-runner.commandsMap.desc%",
+          "default": {
+            "plugin": "ms-python.python",
+            "command": "python.execInTerminal",
+            "terminal": "python -u ${fileName}"
+          },
+          "additionalProperties": false,
+          "markdownDescription": "%press-runner.commandsMap.python.Commands.desc%"
+        },
+        "press-runner.commandsMap.python.useTerminal": {
+          "type": "string",
+          "enum": [
+            "global",
+            "auto",
+            "always",
+            "never"
+          ],
+          "enumDescriptions": [
+            "%press-runner.commandsMap.python.useTerminal.global%",
+            "%press-runner.commandsMap.python.useTerminal.auto%",
+            "%press-runner.commandsMap.python.useTerminal.always%",
+            "%press-runner.commandsMap.python.useTerminal.never%"
+          ],
+          "default": "global",
+          "description": "%press-runner.commandsMap.python.useTerminal.desc%",
+          "scope": "resource"
+        },
+        "press-runner.commandsMap.c.Commands": {
+          "type": "object",
+          "properties": {
+            "plugin": {
+              "type": "string",
+              "description": "%press-runner.commandsMap.c.Commands.plugin_desc%"
+            },
+            "command": {
+              "type": "string",
+              "description": "%press-runner.commandsMap.c.Commands.command_desc%"
+            },
+            "terminal": {
+              "type": "string",
+              "description": "%press-runner.commandsMap.c.Commands.terminal_desc%"
+            }
+          },
+          "default": {
+            "plugin": "ms-vscode.cmake-tools",
+            "command": "cmake.launchTarget",
+            "terminal": "cd ${dir} && gcc ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
+          },
+          "additionalProperties": false,
+          "markdownDescription": "%press-runner.commandsMap.c.Commands.desc%"
+        },
+        "press-runner.commandsMap.c.useTerminal": {
+          "type": "string",
+          "enum": [
+            "global",
+            "auto",
+            "always",
+            "never"
+          ],
+          "enumDescriptions": [
+            "%press-runner.commandsMap.c.useTerminal.global%",
+            "%press-runner.commandsMap.c.useTerminal.auto%",
+            "%press-runner.commandsMap.c.useTerminal.always%",
+            "%press-runner.commandsMap.c.useTerminal.never%"
+          ],
+          "default": "global",
+          "description": "%press-runner.commandsMap.c.useTerminal.desc%",
+          "scope": "resource"
+        },
+        "press-runner.commandsMap.cpp.Commands": {
+          "type": "object",
+          "properties": {
+            "plugin": {
+              "type": "string",
+              "description": "%press-runner.commandsMap.cpp.Commands.plugin_desc%"
+            },
+            "command": {
+              "type": "string",
+              "description": "%press-runner.commandsMap.cpp.Commands.command_desc%"
+            },
+            "terminal": {
+              "type": "string",
+              "description": "%press-runner.commandsMap.cpp.Commands.terminal_desc%"
+            }
+          },
+          "default": {
+            "plugin": "ms-vscode.cmake-tools",
+            "command": "cmake.launchTarget",
+            "terminal": "cd ${dir} && g++ ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
+          },
+          "additionalProperties": false,
+          "markdownDescription": "%press-runner.commandsMap.cpp.Commands.desc%"
+        },
+        "press-runner.commandsMap.cpp.useTerminal": {
+          "type": "string",
+          "enum": [
+            "global",
+            "auto",
+            "always",
+            "never"
+          ],
+          "enumDescriptions": [
+            "%press-runner.commandsMap.cpp.useTerminal.global%",
+            "%press-runner.commandsMap.cpp.useTerminal.auto%",
+            "%press-runner.commandsMap.cpp.useTerminal.always%",
+            "%press-runner.commandsMap.cpp.useTerminal.never%"
+          ],
+          "default": "global",
+          "description": "%press-runner.commandsMap.cpp.useTerminal.desc%",
           "scope": "resource"
         }
       }

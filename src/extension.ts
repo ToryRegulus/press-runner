@@ -4,14 +4,12 @@ import * as vscode from 'vscode';
 type UseTerminalMode = 'auto' | 'always' | 'never' | 'global'
 type GUseTerminalMode = 'auto' | 'always' | 'never'
 
-interface CommandPair {
-	plugin: string;
-	terminal: string;
-}
+let cachedTerminal: vscode.Terminal | undefined;
 
-interface LangCommandConfig {
-	commands: CommandPair;
-	useTerminal: UseTerminalMode;
+interface CommandsConfig {
+	plugin: string;
+	command: string;
+	terminal: string;
 }
 
 function replaceVars(command: string, document: vscode.TextDocument): string {
@@ -36,7 +34,7 @@ function isPluginActive(extensionId: string): boolean {
 	return !!ext?.isActive;
 }
 
-function shouldUseTerminal(lang: string, mode: UseTerminalMode, globalMode: GUseTerminalMode): boolean {
+function shouldUseTerminal(extensionId: string, mode: UseTerminalMode, globalMode: GUseTerminalMode): boolean {
 	const effectiveMode = (mode == 'global') ? globalMode : mode;
 
 	if (effectiveMode == 'always') {
@@ -44,15 +42,17 @@ function shouldUseTerminal(lang: string, mode: UseTerminalMode, globalMode: GUse
 	} else if (effectiveMode == 'never') {
 		return false;
 	} else {
-		if (lang == 'python') {
-			return !isPluginActive('ms-python.python');
-		} else if (lang == 'c' || lang == 'cpp') {
-			return !isPluginActive('ms-vscode.cmake-tools');
-		}
+		return !isPluginActive(extensionId);
 	}
-
-	return true;
 }
+
+function runInTerminal(terminalCommand: string, lang: string) {
+	if (!cachedTerminal) {
+		cachedTerminal = vscode.window.createTerminal(`Run ${lang}`);
+	}
+	cachedTerminal.show();
+	cachedTerminal.sendText(terminalCommand);
+  }
 
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand('press-runner.run', async () => {
@@ -65,28 +65,28 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const lang = editor.document.languageId;
 		const config = vscode.workspace.getConfiguration('press-runner');
-		const commandMap = config.get<Record<string, LangCommandConfig>>('commandsMap');
 
-		const langConfig = commandMap?.[lang];
+		const commandPath = `commandsMap.${lang}.Commands`;
+		const modePath = `commandsMap.${lang}.useTerminal`;
+		
+		const langCommands = config.get<CommandsConfig>(commandPath);
+		const langMode = config.get<UseTerminalMode>(modePath, 'global');
+		const globalMode = config.get<GUseTerminalMode>('useTerminal', 'auto');
 
-		if (!langConfig || typeof langConfig !== 'object') {
-			vscode.window.showErrorMessage(`Invalid config for language: ${lang}.`);
+		if (!langCommands) {
+			vscode.window.showErrorMessage(`No command configuration found for language: ${lang}.`);
 
 			return;
 		}
 
-		const { commands, useTerminal } = langConfig;
-		const terminalCommand = replaceVars(commands.terminal, editor.document);
-		const globalUseTerminal = config.get<GUseTerminalMode>('useTerminal', 'auto');
-		const shouldUseTerm = shouldUseTerminal(lang, useTerminal, globalUseTerminal);
+		const terminalCommand = replaceVars(langCommands.terminal, editor.document);
+		const shouldUseTerm = shouldUseTerminal(langCommands.plugin, langMode, globalMode);
 
 		try {
 			if (shouldUseTerm) {
-				const terminal = vscode.window.createTerminal(`Run ${lang}`);
-				terminal.show();
-				terminal.sendText(terminalCommand);
+				runInTerminal(terminalCommand, lang);
 			} else {
-				await vscode.commands.executeCommand(commands.plugin);
+				await vscode.commands.executeCommand(langCommands.command);
 			}
 		} catch (err) {
 			vscode.window.showErrorMessage(`${err}.`);
