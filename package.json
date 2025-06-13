@@ -1,23 +1,80 @@
 {
   "name": "press-runner",
   "displayName": "Press Runner",
-  "description": "demo",
-  "version": "0.0.1",
+  "description": "This is a sample VS Code extension that lets you run code in different languages by pressing a single button.",
+  "version": "0.1.0",
+  "publisher": "ToryRegulus",
   "engines": {
     "vscode": "^1.101.0"
   },
   "categories": [
+    "Programming Languages",
     "Other"
   ],
+  "keywords": [
+    "python",
+    "cpp"
+  ],
+  "homepage": "https://github.com/ToryRegulus/press-runner/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ToryRegulus/press-runner"
+  },
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "press-runner.helloWorld",
-        "title": "Hello World"
+        "command": "press-runner.run",
+        "title": "Run Code"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Press Runner Configuration",
+      "properties": {
+        "press-runner.useTerminal": {
+          "type": "string",
+          "enum": ["auto", "always", "never"],
+          "enumDescriptions": [
+            "%press-runner.useTerminal.auto%",
+            "%press-runner.useTerminal.always%",
+            "%press-runner.useTerminal.never%"
+          ],
+          "default": "auto",
+          "description": "%press-runner.useTerminal.desc%",
+          "scope": "resource"
+        },
+        "press-runner.commandsMap": {
+          "type": "object",
+          "default": {
+            "python": {
+              "commands": {
+                "plugin": "python.execInDedicatedTerminal",
+                "terminal": "python ${fileName}"
+              },
+              "useTerminal": "global"
+            },
+            "c": {
+              "commands": {
+                "plugin": "cmake.launchTarget",
+                "terminal": "cd ${dir} && gcc ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
+              },
+              "useTerminal": "global"
+            },
+            "cpp": {
+              "commands": {
+                "plugin": "cmake.launchTarget",
+                "terminal": "cd ${dir} && g++ ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
+              },
+              "useTerminal": "global"
+            }
+          },
+          "description": "%press-runner.commandsMap.desc%",
+          "scope": "resource"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

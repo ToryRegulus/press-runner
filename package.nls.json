@@ -1,0 +1,7 @@
+{
+    "press-runner.useTerminal.desc": "Global setting to determine whether to use terminal or plugin commands.",
+    "press-runner.useTerminal.auto": "Use plugin command if the corresponding plugin is activated, otherwise fallback to terminal.",
+    "press-runner.useTerminal.always": "Always run via terminal.",
+    "press-runner.useTerminal.never": "Always run via plugin command (must be registered).",
+    "press-runner.commandsMap.desc": "Define run commands for different languages."
+}

@@ -1,6 +1,6 @@
-# press-runner README
+# Press Runner
 
-This is the README for your extension "press-runner". After writing up a brief description, we recommend including the following sections.
+This is the README for your extension "Press Runner". After writing up a brief description, we recommend including the following sections.
 
 ## Features
 
@@ -12,60 +12,78 @@ For example if there is an image subfolder under your extension project workspac
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
-## Requirements
+## Usages
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Bind your preferred shortcut to the extension command using either method below:
 
-## Extension Settings
+### Option 1: For Vim Keybindings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+If you use the [VSCodeVim extension](https://marketplace.visualstudio.com/items?itemName=vscodevim.vim), add this to your `settings.json`:
 
-For example:
+```json
+{
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": ["<leader>", "r"],  // Customize your preferred key combo
+            "commands": ["press-runner.run"]
+        }
+    ]
+}
+```
 
-This extension contributes the following settings:
+### Option 2: Standard VSCode Keybinding
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+Alternatively, add this to your `keybindings.json`:
 
-## Known Issues
+```json
+[
+    {
+        "key": "ctrl+r",  // Customize your preferred shortcut
+        "command": "press-runner.run",
+        "when": "editorTextFocus"
+    }
+]
+```
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+> **Tips**:  
+>
+> - Replace the key combinations with your preferred shortcuts
+> - Use VSCode's command palette (`Ctrl+Shift+P`) to quickly open these files:
+>   - "Preferences: Open Settings (JSON)"
+>   - "Preferences: Open Keyboard Shortcuts (JSON)"
 
-## Release Notes
+## Extension Configuration
 
-Users appreciate release notes as you update your extension.
+Customize command execution by language in your `settings.json`:
 
-### 1.0.0
+```json
+{
+    "press-runner.commandsMap": {
+        "python": {
+            "commands": {
+                "plugin": "python.execInDedicatedTerminal",
+                "terminal": "python ${fileName}"
+            },
+            "useTerminal": "auto"
+        },
+        "c": {
+            "commands": {
+                "plugin": "cmake.launchTarget",
+                "terminal": "cd ${dir} && gcc ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
+            },
+            "useTerminal": "auto"
+        },
+        "cpp": {
+            "commands": {
+                "plugin": "cmake.launchTarget",
+                "terminal": "cd ${dir} && g++ ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
+            },
+            "useTerminal": "auto"
+        }
+    }
+}
+```
 
-Initial release of ...
+## Change Log
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+View the full [Change Log](https://github.com/ToryRegulus/press-runner/blob/main/CHANGELOG.md) on GitHub.

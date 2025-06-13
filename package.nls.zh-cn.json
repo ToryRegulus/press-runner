@@ -1,0 +1,7 @@
+{
+    "press-runner.useTerminal.desc": "全局设置使用终端运行命令还是调用插件命令。",
+    "press-runner.useTerminal.auto": "如果相关插件已激活，则自动使用插件命令，否则使用终端。",
+    "press-runner.useTerminal.always": "总是使用终端运行命令。",
+    "press-runner.useTerminal.never": "总是使用插件命令（需激活相关插件）。",
+    "press-runner.commandsMap.desc": "自定义不同语言的执行命令。"
+}
