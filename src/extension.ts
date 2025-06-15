@@ -35,11 +35,11 @@ function isPluginActive(extensionId: string): boolean {
 }
 
 function shouldUseTerminal(extensionId: string, mode: UseTerminalMode, globalMode: GUseTerminalMode): boolean {
-	const effectiveMode = (mode == 'global') ? globalMode : mode;
+	const effectiveMode = (mode === 'global') ? globalMode : mode;
 
-	if (effectiveMode == 'always') {
+	if (effectiveMode === 'always') {
 		return true;
-	} else if (effectiveMode == 'never') {
+	} else if (effectiveMode === 'never') {
 		return false;
 	} else {
 		return !isPluginActive(extensionId);
@@ -71,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 		
 		const langCommands = config.get<CommandsConfig>(commandPath);
 		const langMode = config.get<UseTerminalMode>(modePath, 'global');
-		const globalMode = config.get<GUseTerminalMode>('useTerminal', 'auto');
+		const globalMode = config.get<GUseTerminalMode>('globalUseTerminal', 'auto');
 
 		if (!langCommands) {
 			vscode.window.showErrorMessage(`No command configuration found for language: ${lang}.`);

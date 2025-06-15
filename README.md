@@ -54,33 +54,36 @@ Alternatively, add this to your `keybindings.json`:
 
 ## Extension Configuration
 
-Customize command execution by language in your `settings.json`:
+### Option 1: With Settings UI (Recommended)
+
+Configure directly through settings UI (Ctrl+, or ⌘+,) by searching for "Press Runner" commands.
+
+### Option 2: Manual Configuration
+
+Alternatively, you can manually edit your `settings.json` with language-specific commands. Example configurations are provided for Python and C++.
 
 ```json
 {
-    "press-runner.commandsMap": {
-        "python": {
-            "commands": {
-                "plugin": "python.execInDedicatedTerminal",
-                "terminal": "python ${fileName}"
-            },
-            "useTerminal": "auto"
-        },
-        "c": {
-            "commands": {
-                "plugin": "cmake.launchTarget",
-                "terminal": "cd ${dir} && gcc ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
-            },
-            "useTerminal": "auto"
-        },
-        "cpp": {
-            "commands": {
-                "plugin": "cmake.launchTarget",
-                "terminal": "cd ${dir} && g++ ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
-            },
-            "useTerminal": "auto"
-        }
-    }
+    // Global setting: Controls whether all commands should run in the terminal by default
+    "press-runner.globalUseTerminal": "auto",
+
+    // Python commands map configuration
+    "press-runner.commandsMap.python.Commands": {
+        "plugin": "ms-python.python",
+        "command": "python.execInTerminal",
+        "terminal": "python -u ${fileName}"
+    },
+    // Controls whether Python command uses terminal
+    "press-runner.commandsMap.python.useTerminal": "global", 
+    
+    // C++ command configuration
+    "press-runner.commandsMap.cpp.Commands": {
+        "plugin": "ms-vscode.cmake-tools",
+        "command": "cmake.launchTarget",
+        "terminal": "cd ${dir} && g++ ${fileName} -o ${fileNameWithoutExt} && ${dir}${fileNameWithoutExt}"
+    },
+    // Controls whether C++ command uses terminal
+    "press-runner.commandsMap.cpp.useTerminal": "global",
 }
 ```
 
